@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Overflow", "Overflow\Overflow.csproj", "{C49506EC-6BA3-4D6A-BCAF-68F6316E0C0E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Overflow.Test", "Overflow.Test\Overflow.Test.csproj", "{83ABAAB6-067A-400B-BF61-74D04B248CEB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C49506EC-6BA3-4D6A-BCAF-68F6316E0C0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C49506EC-6BA3-4D6A-BCAF-68F6316E0C0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C49506EC-6BA3-4D6A-BCAF-68F6316E0C0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C49506EC-6BA3-4D6A-BCAF-68F6316E0C0E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83ABAAB6-067A-400B-BF61-74D04B248CEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83ABAAB6-067A-400B-BF61-74D04B248CEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83ABAAB6-067A-400B-BF61-74D04B248CEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83ABAAB6-067A-400B-BF61-74D04B248CEB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
