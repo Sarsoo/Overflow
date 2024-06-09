@@ -1,6 +1,7 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS base
 
 RUN dotnet workload install wasm-tools
+RUN apt install python3
 
 COPY *.sln .
 COPY Overflow/*.csproj ./Overflow/
