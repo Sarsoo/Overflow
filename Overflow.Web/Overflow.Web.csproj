@@ -9,6 +9,9 @@
     <ItemGroup>
       <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.6" />
       <PackageReference Include="MongoDB.Driver" Version="2.25.0" />
+      <PackageReference Include="NLog" Version="5.3.2" />
+      <PackageReference Include="NLog.Extensions.Logging" Version="5.3.11" />
+      <PackageReference Include="NLog.Web.AspNetCore" Version="5.3.11" />
       <PackageReference Include="Quartz" Version="3.9.0" />
       <PackageReference Include="Quartz.AspNetCore" Version="3.9.0" />
       <PackageReference Include="Quartz.Extensions.DependencyInjection" Version="3.9.0" />
@@ -26,6 +29,12 @@
       <_ContentIncludedByDefault Remove="wwwroot\bootstrap\bootstrap.min.css" />
       <_ContentIncludedByDefault Remove="wwwroot\bootstrap\bootstrap.min.css.map" />
       <_ContentIncludedByDefault Remove="wwwroot\favicon.png" />
+    </ItemGroup>
+    
+    <ItemGroup>
+        <None Update="nlog.config">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
 </Project>

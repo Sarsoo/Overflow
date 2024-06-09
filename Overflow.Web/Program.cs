@@ -3,6 +3,7 @@ using Overflow;
 
 
 using MongoDB.Driver;
+using NLog.Extensions.Logging;
 using Overflow.SouthernWater;
 using Quartz;
 using Quartz.AspNetCore;
@@ -14,9 +15,12 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents();
 
+builder.Logging.ClearProviders();
+builder.Logging.AddNLog(builder.Configuration);
+
 var driver = new MongoClient(builder.Configuration.GetConnectionString("Default"));
 builder.Services.AddSingleton(driver);
-builder.Services.AddScoped<IMongoDatabase>(s => s.GetRequiredService<MongoClient>().GetDatabase("overflow"));
+builder.Services.AddScoped<IMongoDatabase>(s => s.GetRequiredService<MongoClient>().GetDatabase(Static.DatabaseName));
 
 builder.Services.AddControllers();
 
@@ -33,6 +37,29 @@ builder.Services.Configure<QuartzOptions>(options =>
 builder.Services.AddQuartz(q =>
 {
     // base Quartz scheduler, job and trigger configuration
+
+    q.UseSimpleTypeLoader();
+    q.UseInMemoryStore();
+    q.UseDefaultThreadPool(tp =>
+    {
+        tp.MaxConcurrency = 5;
+    });
+
+    var swKey = new JobKey("southern-water-api", "southern-water");
+
+    q.AddJob<SouthernWaterJob>(j => j
+        .WithDescription("Pull spills data from Southern Water API")
+        .WithIdentity(swKey)
+        .UsingJobData("IsFull", false)
+    );
+
+    q.AddTrigger(t => t
+        .WithIdentity("southern-water-api-trigger")
+        .ForJob(swKey)
+        .StartNow()
+        .WithCronSchedule(builder.Configuration.GetSection("SouthernWater").GetValue<string>("Cron") ?? "0 0 8 * * ?")
+        .WithDescription("Periodic trigger for Southern Water API pulling")
+    );
 });
 
 // ASP.NET Core hosting
@@ -45,6 +72,7 @@ builder.Services.AddQuartzServer(options =>
 builder.Services.AddHttpClient();
 builder.Services.AddSingleton<SouthernWaterApi>();
 builder.Services.AddScoped<SouthernWaterApiJobRunner, SouthernWaterApiJobRunnerPersisting>();
+builder.Services.AddTransient<SouthernWaterJob>();
 
 var app = builder.Build();
 

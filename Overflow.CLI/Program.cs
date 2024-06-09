@@ -10,6 +10,6 @@ var driver = new MongoClient("mongodb://localhost");
 var api = new SouthernWaterApi(new HttpClient());
 await api.LoadApiUrl();
 
-var runner = new SouthernWaterApiJobRunnerPersisting(api, NullLogger<SouthernWaterApiJobRunner>.Instance, driver.GetDatabase("overflow"));
+var runner = new SouthernWaterApiJobRunnerPersisting(api, NullLogger<SouthernWaterApiJobRunner>.Instance, driver.GetDatabase(Static.DatabaseName));
 
 await runner.LoadSpills(5);

@@ -1,6 +1,7 @@
 ﻿using System.Net.Http.Json;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using Quartz.Util;
 
 namespace Overflow.SouthernWater;
 
@@ -64,9 +65,11 @@ public partial class SouthernWaterApi
 
     public async Task<PagedItems<Spill>?> GetSpills(int page = 1, JsonSerialiser? jsonSerialiser = null)
     {
+        if (baseUrl.IsNullOrWhiteSpace()) await LoadApiUrl();
+
         var request = new HttpRequestMessage()
         {
-            RequestUri = new Uri(baseUrl + spillsEndpoint),
+            RequestUri = new Uri(baseUrl + spillsEndpoint + "?page=" + page),
             Method = HttpMethod.Get,
             Headers =
             {
@@ -83,8 +86,6 @@ public partial class SouthernWaterApi
                 {"X-Requested-With", "XMLHttpRequest"},
             }
         };
-
-        request.Options.TryAdd("page", page);
 
         var content = await _client.SendAsync(request);
 
@@ -106,11 +107,13 @@ public partial class SouthernWaterApi
 
     public async IAsyncEnumerable<PagedItems<Spill>?> GetAllSpills(TimeSpan interval, int? pageLimit = null, JsonSerialiser? jsonSerialiser = null)
     {
+        Random rnd = new Random();
+
         var firstPage = await GetSpills(page: 1, jsonSerialiser);
 
         yield return firstPage;
 
-        await Task.Delay(interval);
+        await Task.Delay(interval + TimeSpan.FromSeconds(rnd.Next(-Static.IntervalWiggleSeconds, Static.IntervalWiggleSeconds)));
 
         var pageCount = Math.Min(pageLimit ?? int.MaxValue, firstPage?.totalPages ?? 1);
 

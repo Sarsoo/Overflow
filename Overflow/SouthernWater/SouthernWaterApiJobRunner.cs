@@ -10,7 +10,7 @@ public class SouthernWaterApiJobRunner(SouthernWaterApi client, ILogger<Southern
 
     public async Task<SouthernWaterApiJob> LoadSpills(int? pageLimit = null)
     {
-        var interval = TimeSpan.FromSeconds(30);
+        var interval = Static.Interval;
         var job = new SouthernWaterApiJob
         {
             StartTime = DateTime.UtcNow,
