@@ -1,8 +1,16 @@
+using System.Text.Json.Serialization;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+
 namespace Overflow.SouthernWater;
 
 public class Spill
 {
-    public int id { get; set; }
+    [JsonIgnore]
+    public ObjectId _id { get; set; }
+
+    [JsonPropertyName("id")]
+    public int sw_id { get; set; }
     public int eventId { get; set; }
     public int siteUnitNumber { get; set; }
     public string bathingSite { get; set; }

@@ -90,6 +90,40 @@ public partial class SouthernWater
 
         content.EnsureSuccessStatusCode();
 
-        return (PagedItems<Spill>?) await content.Content.ReadFromJsonAsync(typeof(PagedItems<Spill>), jsonSerialiser ?? new JsonSerialiser());
+        var parsedPage =  (PagedItems<Spill>?) await content.Content.ReadFromJsonAsync(typeof(PagedItems<Spill>), jsonSerialiser ?? new JsonSerialiser());
+
+        if (parsedPage is not null)
+        {
+            parsedPage.items.ForEach(x =>
+            {
+                x.eventStart = x.eventStart.ToUniversalTime();
+                x.eventStop = x.eventStop.ToUniversalTime();
+            });
+        }
+
+        return parsedPage;
+    }
+
+    public async IAsyncEnumerable<PagedItems<Spill>?> GetAllSpills(TimeSpan interval, int? pageLimit = null, JsonSerialiser? jsonSerialiser = null)
+    {
+        var firstPage = await GetSpills(page: 1, jsonSerialiser);
+
+        yield return firstPage;
+
+        await Task.Delay(interval);
+
+        var pageCount = Math.Min(pageLimit ?? int.MaxValue, firstPage?.totalPages ?? 1);
+
+        foreach (var pageNum in Enumerable.Range(2, pageCount - 1))
+        {
+            var nextPage = await GetSpills(page: pageNum, jsonSerialiser);
+
+            if (nextPage is not null)
+            {
+                yield return nextPage;
+            }
+
+            await Task.Delay(interval);
+        }
     }
 }
