@@ -7,21 +7,23 @@
 
 <h1>Spills</h1>
 
-<p>This component demonstrates showing data.</p>
+<p>This shows the data that you can see on the Southern Water Beachbuoy system</p>
 
 <RadzenCard class="my-4">
-    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Start"  Wrap="FlexWrap.Wrap">
-        <RadzenCheckBox @bind-Value=@showIds Name="ShowIds" />
-        <RadzenLabel Text="Show IDs" Component="ShowIds" Style="margin-left: 8px; vertical-align: middle;" />
+    <RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Start" Wrap="FlexWrap.Wrap">
+        @if (job is not null)
+        {
+            <RadzenText TextStyle="TextStyle.Body1">Last updated at <b>@job.EndTime</b></RadzenText>
+        }
     </RadzenStack>
 </RadzenCard>
 
-<SpillsTable Job=@job ShowIds=@showIds />
+<SpillsTable Job=@job />
 
 @code {
     private SouthernWaterApiJob? job;
     [Inject] private IMongoDatabase database { get; set; }
-    private bool showIds;
+    // private bool showIds;
 
     protected override async Task OnInitializedAsync()
     {

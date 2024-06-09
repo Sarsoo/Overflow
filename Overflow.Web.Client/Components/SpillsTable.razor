@@ -1,4 +1,5 @@
-﻿@using Overflow.SouthernWater
+﻿@using System.Globalization
+@using Overflow.SouthernWater
 @rendermode RenderMode.InteractiveAuto
 
 @if (Job == null)
@@ -9,28 +10,32 @@
 }
 else
 {
-    <RadzenDataGrid Data="@Job.Spills" TItem="Spill"
+    <RadzenDataGrid @ref="spillsGrid" Data="@Job.Spills" TItem="Spill"
                     AllowFiltering="true"
+                    FilterMode="FilterMode.CheckBoxList"
                     AllowColumnResize="true"
                     AllowSorting="true"
                     PageSize="25"
                     AllowPaging="true"
                     ShowPagingSummary="true"
+                    AllowColumnPicking="true"
+                    AllowColumnReorder="true"
                     >
         <Columns>
-            @if (ShowIds)
-            {
-                <RadzenDataGridColumn TItem="Spill" Property="sw_id" Title="Id"/>
-                <RadzenDataGridColumn TItem="Spill" Property="eventId" Title="Event Id"/>
-                <RadzenDataGridColumn TItem="Spill" Property="siteUnitNumber" Title="Site Unit Number"/>
-                <RadzenDataGridColumn TItem="Spill" Property="associatedSiteId" Title="Associated Site Id"/>
-                <RadzenDataGridColumn TItem="Spill" Property="overFlowSiteId" Title="OverFlow Site Id"/>
-            }
+            <RadzenDataGridColumn Visible="false" TItem="Spill" Property="sw_id" Title="Id"/>
+            <RadzenDataGridColumn Visible="false" TItem="Spill" Property="eventId" Title="Event Id"/>
+            <RadzenDataGridColumn Visible="false" TItem="Spill" Property="siteUnitNumber" Title="Site Unit Number"/>
+            <RadzenDataGridColumn Visible="false" TItem="Spill" Property="associatedSiteId" Title="Associated Site Id"/>
+            <RadzenDataGridColumn Visible="false" TItem="Spill" Property="overFlowSiteId" Title="OverFlow Site Id"/>
             <RadzenDataGridColumn TItem="Spill" Property="bathingSite" Title="Bathing Site"/>
             <RadzenDataGridColumn TItem="Spill" Property="outfallName" Title="Outfall"/>
             <RadzenDataGridColumn TItem="Spill" Property="eventStart" Title="Event Start"/>
             <RadzenDataGridColumn TItem="Spill" Property="eventStop" Title="Event End"/>
-            <RadzenDataGridColumn TItem="Spill" Property="duration" Title="Duration"/>
+            <RadzenDataGridColumn TItem="Spill" Property="duration" Title="Duration">
+                <FooterTemplate>
+                    Total Duration: <b>@Job.Spills.Select(j => j.duration).Sum().ToString(CultureInfo.CurrentCulture)</b> min
+                </FooterTemplate>
+            </RadzenDataGridColumn>
             <RadzenDataGridColumn TItem="Spill" Property="status" Title="Status"/>
             <RadzenDataGridColumn TItem="Spill" Property="isImpacting" Title="Is Impacting"/>
         </Columns>
@@ -38,6 +43,6 @@ else
 }
 
 @code {
+    RadzenDataGrid<Spill> spillsGrid;
     [Parameter] public SouthernWaterApiJob? Job { get; set; }
-    [Parameter] public bool ShowIds { get; set; }
 }
