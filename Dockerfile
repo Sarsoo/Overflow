@@ -3,6 +3,7 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS base
 COPY *.sln .
 COPY Overflow/*.csproj ./Overflow/
 COPY Overflow.Web/*.csproj ./Overflow.Web/
+COPY Overflow.Web.Client/*.csproj ./Overflow.Web.Clientl/
 RUN dotnet restore ./Overflow.Web/Overflow.Web.csproj
 
 COPY . ./
