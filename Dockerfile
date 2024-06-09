@@ -1,5 +1,7 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS base
 
+RUN dotnet workload install wasm-tools
+
 COPY *.sln .
 COPY Overflow/*.csproj ./Overflow/
 COPY Overflow.Web/*.csproj ./Overflow.Web/
