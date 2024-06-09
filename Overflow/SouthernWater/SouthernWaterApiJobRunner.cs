@@ -4,11 +4,11 @@ using MongoDB.Driver;
 
 namespace Overflow.SouthernWater;
 
-public class SouthernWaterApiJobRunner(SouthernWater client, ILogger<SouthernWaterApiJobRunner> logger)
+public class SouthernWaterApiJobRunner(SouthernWaterApi client, ILogger<SouthernWaterApiJobRunner> logger)
 {
     protected readonly ILogger<SouthernWaterApiJobRunner> _logger = logger;
 
-    public async Task<SouthernWaterApiJob> LoadSpills()
+    public async Task<SouthernWaterApiJob> LoadSpills(int? pageLimit = null)
     {
         var interval = TimeSpan.FromSeconds(30);
         var job = new SouthernWaterApiJob
@@ -28,7 +28,7 @@ public class SouthernWaterApiJobRunner(SouthernWater client, ILogger<SouthernWat
 
         await JobCreated(job);
 
-        var spills = client.GetAllSpills(interval);
+        var spills = client.GetAllSpills(interval, pageLimit: pageLimit);
 
         await foreach (var page in spills)
         {
@@ -81,12 +81,12 @@ public class SouthernWaterApiJobRunner(SouthernWater client, ILogger<SouthernWat
 }
 
 public class SouthernWaterApiJobRunnerPersisting(
-    SouthernWater client,
+    SouthernWaterApi client,
     ILogger<SouthernWaterApiJobRunner> logger,
     IMongoDatabase mongo)
     : SouthernWaterApiJobRunner(client, logger)
 {
-    private readonly IMongoCollection<SouthernWaterApiJob> _collection = mongo.GetCollection<SouthernWaterApiJob>("southern_water_api_job");
+    private readonly IMongoCollection<SouthernWaterApiJob> _collection = mongo.GetCollection<SouthernWaterApiJob>(Static.CollectionName);
 
     protected override async Task JobCreated(SouthernWaterApiJob job)
     {

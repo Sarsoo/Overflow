@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Overflow.Web", "Overflow.We
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Overflow.CLI", "Overflow.CLI\Overflow.CLI.csproj", "{393EF268-E745-4550-9607-DBE6B4C456DA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Overflow.Web.Client", "Overflow.Web.Client\Overflow.Web.Client.csproj", "{FDA03F0A-260B-4110-B5B6-19CCFFBB1618}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{393EF268-E745-4550-9607-DBE6B4C456DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{393EF268-E745-4550-9607-DBE6B4C456DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{393EF268-E745-4550-9607-DBE6B4C456DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FDA03F0A-260B-4110-B5B6-19CCFFBB1618}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDA03F0A-260B-4110-B5B6-19CCFFBB1618}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDA03F0A-260B-4110-B5B6-19CCFFBB1618}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FDA03F0A-260B-4110-B5B6-19CCFFBB1618}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

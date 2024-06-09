@@ -10,7 +10,7 @@ public class Tests
     [Test]
     public async Task Test1()
     {
-        var southern = new SouthernWater.SouthernWater(new HttpClient());
+        var southern = new SouthernWater.SouthernWaterApi(new HttpClient());
         await southern.LoadApiUrl();
         var spills = await southern.GetSpills();
     }

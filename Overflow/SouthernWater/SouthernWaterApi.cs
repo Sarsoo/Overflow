@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace Overflow.SouthernWater;
 
-public partial class SouthernWater
+public partial class SouthernWaterApi
 {
     private readonly HttpClient _client;
 
@@ -13,7 +13,7 @@ public partial class SouthernWater
     private string baseUrl;
     private string apiKey;
 
-    public SouthernWater(HttpClient client)
+    public SouthernWaterApi(HttpClient client)
     {
         _client = client;
     }

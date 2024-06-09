@@ -6,9 +6,6 @@ namespace Overflow.SouthernWater;
 
 public class Spill
 {
-    [JsonIgnore]
-    public ObjectId _id { get; set; }
-
     [JsonPropertyName("id")]
     public int sw_id { get; set; }
     public int eventId { get; set; }

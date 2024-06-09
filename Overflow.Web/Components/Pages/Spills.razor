@@ -1,0 +1,33 @@
+﻿@page "/spills"
+@using MongoDB.Driver
+@using Overflow.SouthernWater
+@rendermode RenderMode.InteractiveServer
+
+<PageTitle>Southern Water Spills</PageTitle>
+
+<h1>Spills</h1>
+
+<p>This component demonstrates showing data.</p>
+
+<RadzenCard class="my-4">
+    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Start"  Wrap="FlexWrap.Wrap">
+        <RadzenCheckBox @bind-Value=@showIds Name="ShowIds" />
+        <RadzenLabel Text="Show IDs" Component="ShowIds" Style="margin-left: 8px; vertical-align: middle;" />
+    </RadzenStack>
+</RadzenCard>
+
+<SpillsTable Job=@job ShowIds=@showIds />
+
+@code {
+    private SouthernWaterApiJob? job;
+    [Inject] private IMongoDatabase database { get; set; }
+    private bool showIds;
+
+    protected override async Task OnInitializedAsync()
+    {
+        job = database.GetCollection<SouthernWaterApiJob>(Static.CollectionName)
+            .AsQueryable()
+            .OrderByDescending(j => j.EndTime)
+            .FirstOrDefault();
+    }
+}
