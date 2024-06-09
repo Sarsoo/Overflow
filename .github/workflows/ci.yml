@@ -17,6 +17,8 @@ jobs:
         uses: actions/setup-dotnet@v3.0.3
         with:
           dotnet-version: ${{ matrix.dotnet-version }}
+      - name: Install WASM Workload
+        run: dotnet workload install wasm-tools
       - name: Install Dependencies
         run: dotnet restore Overflow.sln
       - name: Build
