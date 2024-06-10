@@ -10,7 +10,7 @@
 }
 else
 {
-    <RadzenScheduler @ref=@scheduler SlotRender=@OnSlotRender style="height: 768px;" TItem="Spill" Data=@Job.Spills StartProperty="eventStart" EndProperty="eventStop"
+    <RadzenScheduler @ref=@scheduler SlotRender=@OnSlotRender style="height: 768px;" TItem="Spill" Data=@Spills StartProperty="eventStart" EndProperty="eventStop"
                      TextProperty="bathingSite" SelectedIndex="2"
                      SlotSelect=@OnSlotSelect AppointmentSelect=@OnAppointmentSelect AppointmentRender=@OnAppointmentRender
                      AppointmentMove=@OnAppointmentMove >
@@ -26,9 +26,21 @@ else
 @code {
     RadzenScheduler<Spill> scheduler;
     [Parameter] public SouthernWaterApiJob? Job { get; set; }
+    [Parameter] public bool GenuineOnly { get; set; } = true;
 
-    Dictionary<DateTime, string> events = new Dictionary<DateTime, string>();
-
+    private IEnumerable<Spill> Spills {
+        get
+        {
+            if (GenuineOnly)
+            {
+                return Job.Spills.Where(j => j.status == "Genuine");
+            }
+            else
+            {
+                return Job.Spills;
+            }
+        }
+    }
 
     void OnSlotRender(SchedulerSlotRenderEventArgs args)
     {

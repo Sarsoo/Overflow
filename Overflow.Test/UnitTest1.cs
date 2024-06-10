@@ -1,3 +1,6 @@
+using Microsoft.Extensions.Logging.Abstractions;
+using Overflow.SouthernWater;
+
 namespace Overflow.Test;
 
 public class Tests
@@ -10,7 +13,7 @@ public class Tests
     [Test]
     public async Task Test1()
     {
-        var southern = new SouthernWater.SouthernWaterApi(new HttpClient());
+        var southern = new SouthernWater.SouthernWaterApi(new HttpClient(), NullLogger<SouthernWaterApi>.Instance);
         await southern.LoadApiUrl();
         var spills = await southern.GetSpills();
     }

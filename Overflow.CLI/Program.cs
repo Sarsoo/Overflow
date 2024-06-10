@@ -7,7 +7,7 @@ using Overflow.SouthernWater;
 
 var driver = new MongoClient("mongodb://localhost");
 
-var api = new SouthernWaterApi(new HttpClient());
+var api = new SouthernWaterApi(new HttpClient(), NullLogger<SouthernWaterApi>.Instance);
 await api.LoadApiUrl();
 
 var runner = new SouthernWaterApiJobRunnerPersisting(api, NullLogger<SouthernWaterApiJobRunner>.Instance, driver.GetDatabase(Static.DatabaseName));

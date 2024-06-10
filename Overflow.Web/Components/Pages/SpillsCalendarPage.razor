@@ -15,15 +15,20 @@
         {
             <RadzenText TextStyle="TextStyle.Body1">Last updated at <b>@job.EndTime</b></RadzenText>
         }
+        <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Start" Wrap="FlexWrap.Wrap">
+            <RadzenCheckBox @bind-Value=@genuineOnly Name="genuineOnly" />
+            <RadzenLabel Text="Genuine Events Only" Component="genuineOnly" Style="margin-left: 8px; vertical-align: middle;" />
+        </RadzenStack>
     </RadzenStack>
 </RadzenCard>
 
-<SpillsCalendar Job="@job" />
+<SpillsCalendar Job="@job" GenuineOnly="@genuineOnly" />
 
 @code {
     private SouthernWaterApiJob? job;
     [Inject] private IMongoDatabase database { get; set; }
     // private bool showIds;
+    private bool genuineOnly = true;
 
     protected override async Task OnInitializedAsync()
     {
