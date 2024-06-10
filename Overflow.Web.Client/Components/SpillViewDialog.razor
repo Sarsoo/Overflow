@@ -1,0 +1,47 @@
+@using Overflow.SouthernWater
+@rendermode RenderMode.InteractiveAuto
+
+<RadzenStack>
+    <RadzenStack Gap="0">
+        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Bathing Site</RadzenText>
+        <RadzenText TextStyle="TextStyle.Body1"><b>@Spill.bathingSite</b></RadzenText>
+        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0">Outfall</RadzenText>
+        <RadzenText TextStyle="TextStyle.Body1"><b>@Spill.outfallName</b></RadzenText>
+    </RadzenStack>
+    <RadzenStack Gap="0">
+        <RadzenText TextStyle="TextStyle.Overline">Status: </RadzenText>
+        <RadzenStack Orientation="Orientation.Horizontal">
+            <RadzenText TextStyle="TextStyle.Body1"><b>@Spill.status</b></RadzenText>
+            @if (Spill.status == "Genuine")
+            {
+                <RadzenIcon Icon="verified" />
+            }
+        </RadzenStack>
+        <RadzenText TextStyle="TextStyle.Overline">Is Impacting</RadzenText>
+        <RadzenStack Orientation="Orientation.Horizontal">
+            @if (Spill.isImpacting)
+            {
+                <RadzenIcon Icon="check_circle" />
+            }
+            else
+            {
+                <RadzenIcon Icon="cancel" />
+            }
+        </RadzenStack>
+    </RadzenStack>
+    <RadzenStack Gap="0">
+        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-2 rz-my-0">Start</RadzenText>
+        <RadzenText TextStyle="TextStyle.Body1"><b>@Spill.eventStart.ToLongDateString()</b> @Spill.eventStart.ToLongTimeString()</RadzenText>
+        <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0">End</RadzenText>
+        <RadzenText TextStyle="TextStyle.Body1"><b>@Spill.eventStop.ToLongDateString()</b> @Spill.eventStop.ToLongTimeString()</RadzenText>
+
+        <RadzenStack Orientation="Orientation.Vertical">
+            <RadzenText TextStyle="TextStyle.Overline" class="rz-display-flex rz-mt-4 rz-mb-0">Duration</RadzenText>
+            <RadzenText TextStyle="TextStyle.Body1">@TimeSpan.FromMinutes(Spill.duration).ToString()</RadzenText>
+        </RadzenStack>
+    </RadzenStack>
+</RadzenStack>
+
+@code {
+    [Parameter] public Spill Spill { get; set; }
+}

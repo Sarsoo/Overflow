@@ -75,24 +75,9 @@ else
 
     async Task OnAppointmentSelect(SchedulerAppointmentSelectEventArgs<Spill> args)
     {
-        // var copy = new Appointment
-        // {
-        //     Start = args.Data.Start,
-        //     End = args.Data.End,
-        //     Text = args.Data.Text
-        // };
-        //
-        // var data = await DialogService.OpenAsync<EditAppointmentPage>("Edit Appointment", new Dictionary<string, object> { { "Appointment", copy } });
-        //
-        // if (data != null)
-        // {
-        //     // Update the appointment
-        //     args.Data.Start = data.Start;
-        //     args.Data.End = data.End;
-        //     args.Data.Text = data.Text;
-        // }
-        //
-        // await scheduler.Reload();
+        _ = await DialogService.OpenAsync<SpillViewDialog>("View Spill", new Dictionary<string, object> { { "Spill", args.Data } });
+
+        await scheduler.Reload();
     }
 
     void OnAppointmentRender(SchedulerAppointmentRenderEventArgs<Spill> args)
