@@ -1,12 +1,12 @@
 using Overflow.Web.Components;
 using Overflow;
 
-
 using MongoDB.Driver;
 using NLog.Extensions.Logging;
 using Overflow.SouthernWater;
 using Quartz;
 using Quartz.AspNetCore;
+using Radzen;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -73,6 +73,8 @@ builder.Services.AddHttpClient();
 builder.Services.AddSingleton<SouthernWaterApi>();
 builder.Services.AddScoped<SouthernWaterApiJobRunner, SouthernWaterApiJobRunnerPersisting>();
 builder.Services.AddTransient<SouthernWaterJob>();
+
+builder.Services.AddRadzenComponents();
 
 var app = builder.Build();
 

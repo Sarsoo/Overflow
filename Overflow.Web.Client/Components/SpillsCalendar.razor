@@ -1,0 +1,109 @@
+﻿@using Overflow.SouthernWater
+@rendermode RenderMode.InteractiveAuto
+@inject DialogService DialogService
+
+@if (Job == null)
+{
+    <p>
+        <em>Loading...</em>
+    </p>
+}
+else
+{
+    <RadzenScheduler @ref=@scheduler SlotRender=@OnSlotRender style="height: 768px;" TItem="Spill" Data=@Job.Spills StartProperty="eventStart" EndProperty="eventStop"
+                     TextProperty="bathingSite" SelectedIndex="2"
+                     SlotSelect=@OnSlotSelect AppointmentSelect=@OnAppointmentSelect AppointmentRender=@OnAppointmentRender
+                     AppointmentMove=@OnAppointmentMove >
+        <RadzenDayView />
+        <RadzenWeekView />
+        <RadzenMonthView />
+        <RadzenYearPlannerView />
+        <RadzenYearTimelineView />
+        <RadzenYearView />
+    </RadzenScheduler>
+}
+
+@code {
+    RadzenScheduler<Spill> scheduler;
+    [Parameter] public SouthernWaterApiJob? Job { get; set; }
+
+    Dictionary<DateTime, string> events = new Dictionary<DateTime, string>();
+
+
+    void OnSlotRender(SchedulerSlotRenderEventArgs args)
+    {
+        // // Highlight today in month view
+        // if (args.View.Text == "Month" && args.Start.Date == DateTime.Today)
+        // {
+        //     args.Attributes["style"] = "background: rgba(255,220,40,.2);";
+        // }
+        //
+        // // Highlight working hours (9-18)
+        // if ((args.View.Text == "Week" || args.View.Text == "Day") && args.Start.Hour > 8 && args.Start.Hour < 19)
+        // {
+        //     args.Attributes["style"] = "background: rgba(255,220,40,.2);";
+        // }
+    }
+
+    async Task OnSlotSelect(SchedulerSlotSelectEventArgs args)
+    {
+        // if (args.View.Text != "Year")
+        // {
+        //     Spill data = await DialogService.OpenAsync<AddAppointmentPage>("Add Appointment",
+        //         new Dictionary<string, object> { { "Start", args.Start }, { "End", args.End } });
+        //
+        //     if (data != null)
+        //     {
+        //         appointments.Add(data);
+        //         // Either call the Reload method or reassign the Data property of the Scheduler
+        //         await scheduler.Reload();
+        //     }
+        // }
+    }
+
+    async Task OnAppointmentSelect(SchedulerAppointmentSelectEventArgs<Spill> args)
+    {
+        // var copy = new Appointment
+        // {
+        //     Start = args.Data.Start,
+        //     End = args.Data.End,
+        //     Text = args.Data.Text
+        // };
+        //
+        // var data = await DialogService.OpenAsync<EditAppointmentPage>("Edit Appointment", new Dictionary<string, object> { { "Appointment", copy } });
+        //
+        // if (data != null)
+        // {
+        //     // Update the appointment
+        //     args.Data.Start = data.Start;
+        //     args.Data.End = data.End;
+        //     args.Data.Text = data.Text;
+        // }
+        //
+        // await scheduler.Reload();
+    }
+
+    void OnAppointmentRender(SchedulerAppointmentRenderEventArgs<Spill> args)
+    {
+        // Never call StateHasChanged in AppointmentRender - would lead to infinite loop
+
+        // if (args.Data.Text == "Birthday")
+        // {
+        //     args.Attributes["style"] = "background: red";
+        // }
+    }
+
+    async Task OnAppointmentMove(SchedulerAppointmentMoveEventArgs args)
+    {
+        // var draggedAppointment = appointments.FirstOrDefault(x => x == args.Appointment.Data);
+        //
+        // if (draggedAppointment != null)
+        // {
+        //     draggedAppointment.Start = draggedAppointment.Start + args.TimeSpan;
+        //
+        //     draggedAppointment.End = draggedAppointment.End + args.TimeSpan;
+        //
+        //     await scheduler.Reload();
+        // }
+    }
+}
