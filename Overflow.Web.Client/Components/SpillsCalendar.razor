@@ -14,8 +14,8 @@ else
                      TextProperty="bathingSite" SelectedIndex="2"
                      SlotSelect=@OnSlotSelect AppointmentSelect=@OnAppointmentSelect AppointmentRender=@OnAppointmentRender
                      AppointmentMove=@OnAppointmentMove >
-        <RadzenDayView />
-        <RadzenWeekView />
+        <RadzenDayView StartTime="TimeSpan.Zero" EndTime="TimeSpan.FromDays(1)" />
+        <RadzenWeekView StartTime="TimeSpan.Zero" EndTime="TimeSpan.FromDays(1)" />
         <RadzenMonthView />
         <RadzenYearPlannerView />
         <RadzenYearTimelineView />

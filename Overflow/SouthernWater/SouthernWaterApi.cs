@@ -139,6 +139,11 @@ public partial class SouthernWaterApi
                 _logger.LogError(e, "HTTP Exception while loading page [{}], waiting {} before retrying", page, Static.Interval);
                 await Task.Delay(Static.Interval);
             }
+            catch (TaskCanceledException e)
+            {
+                _logger.LogError(e, "HTTP Timeout Exception while loading page [{}], waiting {} before retrying", page, Static.Interval);
+                await Task.Delay(1.5 * Static.Interval);
+            }
         }
 
         return parsedPage;
