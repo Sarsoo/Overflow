@@ -60,6 +60,22 @@ builder.Services.AddQuartz(q =>
         .WithCronSchedule(builder.Configuration.GetSection("SouthernWater").GetValue<string>("Cron") ?? "0 0 8 * * ?")
         .WithDescription("Periodic trigger for Southern Water API pulling")
     );
+
+    var cacheKey = new JobKey("cache-refresh", "cache");
+
+    q.AddJob<CacheReloadJob>(j => j
+        .WithDescription("Refresh caches")
+        .WithIdentity(cacheKey)
+        .UsingJobData("IsFull", false)
+    );
+
+    q.AddTrigger(t => t
+        .WithIdentity("cache-refresh-trigger")
+        .ForJob(cacheKey)
+        .StartNow()
+        .WithCronSchedule(builder.Configuration.GetSection("Cache").GetValue<string>("Cron") ?? "0 0 8 * * ?")
+        .WithDescription("Periodic trigger for cache refreshing")
+    );
 });
 
 // ASP.NET Core hosting
@@ -73,6 +89,10 @@ builder.Services.AddHttpClient();
 builder.Services.AddSingleton<SouthernWaterApi>();
 builder.Services.AddScoped<SouthernWaterApiJobRunner, SouthernWaterApiJobRunnerPersisting>();
 builder.Services.AddTransient<SouthernWaterJob>();
+
+builder.Services.AddSingleton<SpillCache>();
+builder.Services.AddSingleton<SouthernWaterSpillCache>();
+builder.Services.AddHostedService<LoadCacheOnStart>();
 
 builder.Services.AddRadzenComponents();
 

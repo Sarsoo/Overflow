@@ -25,24 +25,8 @@
 <SpillsCalendar Job="@job" GenuineOnly="@genuineOnly" />
 
 @code {
-    private SouthernWaterApiJob? job;
-    [Inject] private IMongoDatabase database { get; set; }
+    private SouthernWaterApiJob? job => cache.CurrentSouthernWaterApiJob;
+    [Inject] private SpillCache cache { get; set; }
     // private bool showIds;
     private bool genuineOnly = true;
-
-    protected override async Task OnInitializedAsync()
-    {
-        job = database.GetCollection<SouthernWaterApiJob>(Static.JobCollectionName)
-            .AsQueryable()
-            .OrderByDescending(j => j.EndTime)
-            .FirstOrDefault();
-
-        if (job is not null)
-        {
-            job.Spills = database.GetCollection<Spill>(Static.SpillCollectionName)
-                .AsQueryable()
-                .Where(s => s.JobId == job._id)
-                .ToList();
-        }
-    }
 }
