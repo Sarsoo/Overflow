@@ -36,6 +36,8 @@ public class SouthernWaterApiJobRunner(SouthernWaterApi client, ILogger<Southern
 
             _logger.LogInformation("Processing page [{}/{}]", page.currentPage, page.totalPages);
 
+            page.items.ForEach(s => s.JobId = job._id);
+
             job.TotalItems = page.totalItems;
             job.Spills.AddRange(page.items);
             try
@@ -86,22 +88,17 @@ public class SouthernWaterApiJobRunnerPersisting(
     IMongoDatabase mongo)
     : SouthernWaterApiJobRunner(client, logger)
 {
-    private readonly IMongoCollection<SouthernWaterApiJob> _collection = mongo.GetCollection<SouthernWaterApiJob>(Static.CollectionName);
+    private readonly IMongoCollection<SouthernWaterApiJob> _jobCollection = mongo.GetCollection<SouthernWaterApiJob>(Static.JobCollectionName);
+    private readonly IMongoCollection<Spill> _spillCollection = mongo.GetCollection<Spill>(Static.SpillCollectionName);
 
     protected override async Task JobCreated(SouthernWaterApiJob job)
     {
-        await _collection.InsertOneAsync(job);
+        await _jobCollection.InsertOneAsync(job);
     }
 
     protected override async Task PageLoaded(SouthernWaterApiJob job, PagedItems<Spill> page)
     {
-        var finder = Builders<SouthernWaterApiJob>.Filter
-            .Eq(j => j._id, job._id);
-
-        var update = Builders<SouthernWaterApiJob>.Update
-            .PushEach(j => j.Spills, page.items);
-
-        await _collection.UpdateOneAsync(finder, update);
+        await _spillCollection.InsertManyAsync(page.items);
     }
 
     protected override async Task JobFinished(SouthernWaterApiJob job)
@@ -113,6 +110,6 @@ public class SouthernWaterApiJobRunnerPersisting(
             .Set(j => j.EndTime, job.EndTime)
             .Set(j => j.TotalItems, job.TotalItems);
 
-        await _collection.UpdateOneAsync(finder, update);
+        await _jobCollection.UpdateOneAsync(finder, update);
     }
 }

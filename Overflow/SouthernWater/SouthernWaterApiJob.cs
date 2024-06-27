@@ -11,5 +11,6 @@ public class SouthernWaterApiJob
     public DateTime? EndTime { get; set; }
     public TimeSpan Interval { get; set; }
     public int TotalItems { get; set; }
+    [BsonIgnore]
     public List<Spill> Spills { get; set; }
 }
