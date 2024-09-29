@@ -22,7 +22,7 @@ public partial class SouthernWaterApi
         _logger = logger;
     }
 
-    [GeneratedRegex(@".*const APIURL = '(?<APIURL>.*)'.*\n.*const APIGWKEY = '(?<APIKEY>.*)'.*", RegexOptions.IgnoreCase)]
+    [GeneratedRegex(@".APIURL=""(?<APIURL>.*)"".*APIGWKEY=""(?<APIKEY>.*?)"".*", RegexOptions.IgnoreCase)]
     private static partial Regex ApiUrlAndKey();
 
     public async Task LoadApiUrl()
@@ -67,11 +67,13 @@ public partial class SouthernWaterApi
                 if (apiUrlFound)
                 {
                     baseUrl = apiUrl.Value;
+                    _logger.LogInformation("API url found [{APIUrl}]", apiUrl);
                 }
 
                 if (apiKeyFound)
                 {
                     this.apiKey = apiKey.Value;
+                    _logger.LogInformation("API key found [{APIKey}]", apiKey);
                 }
             }
             catch (HttpRequestException e)
