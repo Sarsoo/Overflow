@@ -8,7 +8,7 @@ public class SouthernWaterApiJobRunner(SouthernWaterApi client, ILogger<Southern
 {
     protected readonly ILogger<SouthernWaterApiJobRunner> _logger = logger;
 
-    public async Task<SouthernWaterApiJob> LoadSpills(int? pageLimit = null)
+    public async Task LoadSpills(int? pageLimit = null)
     {
         var interval = Static.Interval;
         var job = new SouthernWaterApiJob
@@ -39,7 +39,7 @@ public class SouthernWaterApiJobRunner(SouthernWaterApi client, ILogger<Southern
             page.items.ForEach(s => s.JobId = job._id);
 
             job.TotalItems = page.totalItems;
-            job.Spills.AddRange(page.items);
+            // job.Spills.AddRange(page.items);
             try
             {
                 await PageLoaded(job, page);
@@ -62,8 +62,6 @@ public class SouthernWaterApiJobRunner(SouthernWaterApi client, ILogger<Southern
         {
             _logger.LogError(e, "Exception while running job finished callback");
         }
-
-        return job;
     }
 
     protected virtual Task JobCreated(SouthernWaterApiJob job)
