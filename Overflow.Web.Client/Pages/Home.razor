@@ -1,7 +1,59 @@
 ﻿@page "/"
 
-<PageTitle>Home</PageTitle>
+<PageTitle>Overflow</PageTitle>
 
-<h1>Hello, world!</h1>
+<div class="rz-p-12">
+    <RadzenText TextStyle="TextStyle.DisplayH1">Overflow</RadzenText>
+</div>
 
-Welcome to your new app.
+<div>
+    <RadzenRow class="rz-text-align-center" Gap="1rem">
+        <RadzenColumn class="rz-p-3">
+            <RadzenCard>
+                <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" Gap="1rem" Class="rz-p-4">
+                    <RadzenIcon Icon="shower"/>
+                    <RadzenStack Gap="0">
+                        <RadzenText TextStyle="TextStyle.Subtitle1">Woops</RadzenText>
+                    </RadzenStack>
+                </RadzenStack>
+                <p>During times of overwhelming rainfall in the UK, storm overflows release unprocessed sewage into waterways and oceans to avoid sewage systems backing up and eventually flooding.</p>
+                <p>There have been controversies for many of the private water companies of the UK that suggest these storm overflows are overused - contaminating British waterways and oceans.</p>
+            </RadzenCard>
+        </RadzenColumn>
+        <RadzenColumn class="rz-p-3">
+            <RadzenCard>
+                <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" Gap="1rem" Class="rz-p-4">
+                    <RadzenIcon Icon="monitor"/>
+                    <RadzenStack Gap="0">
+                        <RadzenText TextStyle="TextStyle.Subtitle1">Having a look</RadzenText>
+                    </RadzenStack>
+                </RadzenStack>
+                <p>I have found that the websites that the water companies use to report overflow usage can be poor at best. Overflow aims to cache this data and present it in an easier to consume fashion</p>
+            </RadzenCard>
+        </RadzenColumn>
+        <RadzenColumn class="rz-p-3">
+            <RadzenCard>
+                <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" Gap="1rem" Class="rz-p-4">
+                    <RadzenIcon Icon="water_drop"/>
+                    <RadzenStack Gap="0">
+                        <RadzenText TextStyle="TextStyle.Subtitle1">Context</RadzenText>
+                    </RadzenStack>
+                </RadzenStack>
+                <p>Like a lot of UK public infrastructure, the water utility companies were privatised in the 1980s.</p>
+                <p>The UK is one of very few countries to have a fully privatised water system and was the first to do so.</p>
+            </RadzenCard>
+        </RadzenColumn>
+        <RadzenColumn class="rz-p-3">
+            <RadzenCard>
+                <RadzenStack Orientation="Orientation.Horizontal" JustifyContent="JustifyContent.Start" Gap="1rem" Class="rz-p-4">
+                    <RadzenIcon Icon="currency_pound"/>
+                    <RadzenStack Gap="0">
+                        <RadzenText TextStyle="TextStyle.Subtitle1">Investment/Plundering</RadzenText>
+                    </RadzenStack>
+                </RadzenStack>
+                While <RadzenLink Path="https://www.ofwat.gov.uk/investment-in-the-water-industry/#qu1" Text="OFWAT suggests" target="_blank"/> that investment in UK water systems has only increased since privatisation,
+                <RadzenLink Path="https://www.bbc.co.uk/news/articles/cw4478wnjdpo" Text="Research from the University of Greenwich" target="_blank"/> has found that investors have managed to withdraw £85.2bn between 1989 and 2023.
+            </RadzenCard>
+        </RadzenColumn>
+    </RadzenRow>
+</div>

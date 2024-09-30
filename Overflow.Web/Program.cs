@@ -1,34 +1,38 @@
-using Overflow.Web.Components;
+using Microsoft.AspNetCore.Components.Web;
 using Overflow;
 
 using MongoDB.Driver;
 using NLog.Extensions.Logging;
 using Overflow.SouthernWater;
+using Overflow.Web.Client;
 using Quartz;
 using Quartz.AspNetCore;
 using Radzen;
+using App = Overflow.Web.Components.App;
+
+RenderModeSettings.InteractiveRenderMode = RenderMode.InteractiveAuto;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
-    .AddInteractiveServerComponents()
-    .AddInteractiveWebAssemblyComponents();
+                .AddInteractiveServerComponents()
+                .AddInteractiveWebAssemblyComponents();
 
 builder.Logging.ClearProviders();
 builder.Logging.AddNLog(builder.Configuration);
 
 var driver = new MongoClient(builder.Configuration.GetConnectionString("Default"));
-builder.Services.AddSingleton(driver);
-builder.Services.AddScoped<IMongoDatabase>(s => s.GetRequiredService<MongoClient>().GetDatabase(Static.DatabaseName));
+builder.Services.AddSingleton(driver)
+                .AddScoped<IMongoDatabase>(s => s.GetRequiredService<MongoClient>().GetDatabase(Static.DatabaseName));
 
 builder.Services.AddControllers();
 
 // base configuration from appsettings.json
-builder.Services.Configure<QuartzOptions>(builder.Configuration.GetSection("Quartz"));
+builder.Services.Configure<QuartzOptions>(builder.Configuration.GetSection("Quartz"))
 
 // if you are using persistent job store, you might want to alter some options
-builder.Services.Configure<QuartzOptions>(options =>
+                .Configure<QuartzOptions>(options =>
 {
     options.Scheduling.IgnoreDuplicates = true; // default: false
     options.Scheduling.OverWriteExistingData = true; // default: true
@@ -85,14 +89,14 @@ builder.Services.AddQuartzServer(options =>
     options.WaitForJobsToComplete = false;
 });
 
-builder.Services.AddHttpClient();
-builder.Services.AddSingleton<SouthernWaterApi>();
-builder.Services.AddScoped<SouthernWaterApiJobRunner, SouthernWaterApiJobRunnerPersisting>();
-builder.Services.AddTransient<SouthernWaterJob>();
+builder.Services.AddHttpClient()
+                .AddSingleton<SouthernWaterApi>()
+                .AddScoped<SouthernWaterApiJobRunner, SouthernWaterApiJobRunnerPersisting>()
+                .AddTransient<SouthernWaterJob>();
 
-builder.Services.AddSingleton<SpillCache>();
-builder.Services.AddSingleton<SouthernWaterSpillCache>();
-builder.Services.AddHostedService<LoadCacheOnStart>();
+builder.Services.AddSingleton<SpillCache>()
+                .AddSingleton<SouthernWaterSpillCache>()
+                .AddHostedService<LoadCacheOnStart>();
 
 builder.Services.AddRadzenComponents();
 
@@ -108,11 +112,12 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseStaticFiles();
-app.UseAntiforgery();
+app.UseStaticFiles()
+    .UseAntiforgery();
 
 app.MapControllers();
 app.MapRazorComponents<App>()
+    .AddAdditionalAssemblies(typeof(Overflow.Web.Client.Components.SpillsCalendar).Assembly)
     .AddInteractiveServerRenderMode()
     .AddInteractiveWebAssemblyRenderMode();
 

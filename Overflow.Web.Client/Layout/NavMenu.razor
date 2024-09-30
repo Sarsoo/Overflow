@@ -1,40 +1,25 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">Overflow.Web.Client</a>
-        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-    </div>
-</div>
+﻿@rendermode InteractiveRenderMode
 
-<div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Counter
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="weather">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Weather
-            </NavLink>
-        </div>
-    </nav>
-</div>
+<RadzenMenu Click="OnParentClicked" Style="height:100%;">
+    <RadzenMenuItem Text="Home" Icon="home" Path="/">
+    </RadzenMenuItem>
+    <RadzenMenuItem Text="Southern Water" Icon="water_drop">
+        <RadzenMenuItem Text="About" Path="/sw-about" Icon="apartment"></RadzenMenuItem>
+        <RadzenMenuItem Text="Spills Data" Path="/spills" Icon="table_view"></RadzenMenuItem>
+        <RadzenMenuItem Text="Spill Events" Path="/spills-cal" Icon="event"></RadzenMenuItem>
+    </RadzenMenuItem>
+    <RadzenAppearanceToggle />
+</RadzenMenu>
 
 @code {
-    private bool collapseNavMenu = true;
 
-    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+void OnParentClicked(MenuItemEventArgs args)
+{
 
-    private void ToggleNavMenu()
-    {
-        collapseNavMenu = !collapseNavMenu;
-    }
+}
 
+void OnChildClicked(MenuItemEventArgs args)
+{
+
+}
 }

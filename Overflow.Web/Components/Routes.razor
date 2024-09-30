@@ -1,6 +1,7 @@
-﻿<Router AppAssembly="@typeof(Program).Assembly">
+﻿<Router AppAssembly="@typeof(Program).Assembly"
+        AdditionalAssemblies="new[] {typeof(Overflow.Web.Client.Components.SpillsCalendar).Assembly}">
     <Found Context="routeData">
-        <RouteView RouteData="@routeData" DefaultLayout="@typeof(Layout.MainLayout)"/>
+        <RouteView RouteData="@routeData" DefaultLayout="@typeof(Overflow.Web.Client.Layout.MainLayout)"/>
         <FocusOnNavigate RouteData="@routeData" Selector="h1"/>
     </Found>
 </Router>

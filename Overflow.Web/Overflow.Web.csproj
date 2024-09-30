@@ -7,16 +7,16 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.6" />
-      <PackageReference Include="MongoDB.Driver" Version="2.25.0" />
-      <PackageReference Include="NLog" Version="5.3.2" />
-      <PackageReference Include="NLog.Extensions.Logging" Version="5.3.11" />
-      <PackageReference Include="NLog.Web.AspNetCore" Version="5.3.11" />
-      <PackageReference Include="Quartz" Version="3.9.0" />
-      <PackageReference Include="Quartz.AspNetCore" Version="3.9.0" />
-      <PackageReference Include="Quartz.Extensions.DependencyInjection" Version="3.9.0" />
-      <PackageReference Include="Quartz.Extensions.Hosting" Version="3.9.0" />
-      <PackageReference Include="Radzen.Blazor" Version="4.32.6" />
+      <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.8" />
+      <PackageReference Include="MongoDB.Driver" Version="2.29.0" />
+      <PackageReference Include="NLog" Version="5.3.4" />
+      <PackageReference Include="NLog.Extensions.Logging" Version="5.3.14" />
+      <PackageReference Include="NLog.Web.AspNetCore" Version="5.3.14" />
+      <PackageReference Include="Quartz" Version="3.13.0" />
+      <PackageReference Include="Quartz.AspNetCore" Version="3.13.0" />
+      <PackageReference Include="Quartz.Extensions.DependencyInjection" Version="3.13.0" />
+      <PackageReference Include="Quartz.Extensions.Hosting" Version="3.13.0" />
+      <PackageReference Include="Radzen.Blazor" Version="5.2.5" />
     </ItemGroup>
 
     <ItemGroup>
@@ -35,6 +35,10 @@
         <None Update="nlog.config">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
+    </ItemGroup>
+    
+    <ItemGroup>
+      <Folder Include="Components\Layout\" />
     </ItemGroup>
 
 </Project>
