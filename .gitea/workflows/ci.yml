@@ -64,7 +64,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Publish Charts
     needs: [build] # for ignoring bad builds
-    if: gitea.event_name == 'push' && (gitea.ref == 'refs/heads/main' || startsWith(gitea.ref, 'refs/tags/'))
+    if: gitea.event_name == 'push' && (gitea.ref == 'refs/heads/master' || startsWith(gitea.ref, 'refs/tags/'))
 
     steps:
       - uses: actions/checkout@v4
