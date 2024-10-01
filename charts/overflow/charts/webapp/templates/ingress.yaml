@@ -1,6 +1,6 @@
 {{- if .Values.ingress.enabled -}}
 {{- $ingressApiIsStable := eq (include "webapp.ingress.isStable" .) "true" -}}
-{{- $ingressSupportsIngressClassName := eq (include "grafana.ingress.supportsIngressClassName" .) "true" -}}
+{{- $ingressSupportsIngressClassName := eq (include "webapp.ingress.supportsIngressClassName" .) "true" -}}
 {{- $ingressSupportsPathType := eq (include "webapp.ingress.supportsPathType" .) "true" -}}
 {{- $fullName := include "webapp.fullname" . -}}
 {{- $servicePort := .Values.service.port -}}
