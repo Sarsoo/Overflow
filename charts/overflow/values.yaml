@@ -1,0 +1,9 @@
+
+mongodb:
+  enabled: false
+
+webapp:
+  connectionString: ""
+  jobs:
+    southernWater: "0 26 20 */2 * ?"
+    cacheReload: "0 0 */3 * * ?"

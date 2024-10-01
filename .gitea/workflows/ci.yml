@@ -59,3 +59,22 @@ jobs:
           tags: gitea.sheep-ghoul.ts.net/sarsoo/overflow:latest
           file: Dockerfile
           context: .
+
+  publish:
+    runs-on: ubuntu-latest
+    name: Publish Charts
+    needs: [build] # for ignoring bad builds
+    if: gitea.event_name == 'push' && (gitea.ref == 'refs/heads/main' || startsWith(gitea.ref, 'refs/tags/'))
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          github-server-url: https://gitea.sheep-ghoul.ts.net
+
+      - uses: azure/setup-helm@v4.2.0
+
+      - name: Package Chart
+        run: helm package -u charts/overflow
+
+      - name: Push Chart
+        run: curl --user ${{ secrets.DOCKERHUB_USERNAME }}:${{ secrets.DOCKERHUB_TOKEN }} -X POST --upload-file ./overflow-*.tgz https://gitea.sheep-ghoul.ts.net/api/packages/${{ secrets.DOCKERHUB_USERNAME }}/helm/api/charts

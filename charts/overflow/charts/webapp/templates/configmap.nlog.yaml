@@ -1,0 +1,66 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "webapp.fullname" . }}-nlog
+  namespace: {{ include "webapp.namespace" . }}
+  labels:
+    {{- include "webapp.labels" . | nindent 4 }}
+  {{- with .Values.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+data:
+  nlog.config: |-
+    <?xml version="1.0" encoding="utf-8" ?>
+    <!-- XSD manual extracted from package NLog.Schema: https://www.nuget.org/packages/NLog.Schema-->
+    <nlog xmlns="http://www.nlog-project.org/schemas/NLog.xsd" xsi:schemaLocation="NLog NLog.xsd"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        autoReload="true"
+        throwConfigExceptions="true"
+        internalLogFile="./log/overflow.nlog.log"
+        internalLogLevel="Info" >
+
+      <extensions>
+          <add assembly="NLog.Web.AspNetCore"/>
+      </extensions>
+
+      <variable name="scopeFormat"
+          value="${all-event-properties:format=[[key]\:[value]]:includeScopeProperties=true:separator= }"/>
+      
+      <variable name="format"
+            value="${longdate}|${level:uppercase=true}|${callsite}:${callsite-linenumber}|${message}${onexception:inner=${newline}}${exception:format=tostring,data:exceptionDataSeparator=\r\n}${newline}    ${scopeFormat}"/>
+
+      <!-- the targets to write to -->
+      <targets>
+        <!-- write logs to file -->
+        <target xsi:type="File"
+            name="logfile"
+            fileName="./log/selector-${shortdate}.log"
+            layout="${format}" />
+        <target xsi:type="File"
+            name="tracefile"
+            fileName="./log/selector.trace-${shortdate}.log"
+            layout="${format}" />
+        <target xsi:type="ColoredConsole"
+            name="logconsole"
+            layout="${format}" />
+      </targets>
+
+      <!-- rules to map from logger name to target -->
+      <rules>
+        <!--<logger name="*" minlevel="Trace" writeTo="tracefile" />-->
+        <logger name="Overflow.*" minlevel="Debug" writeTo="logconsole" />
+        
+        <!--Output hosting lifetime messages to console target for faster startup detection -->
+        <logger name="Microsoft.Hosting.Lifetime" minlevel="Info" writeTo="logconsole" final="true" />
+        <logger name="Microsoft.AspNetCore.HttpLogging.HttpLoggingMiddleware" minlevel="Info" writeTo="logconsole" final="true" />
+
+        <!--Skip non-critical Microsoft logs and so log only own logs (BlackHole) -->
+        <logger name="Microsoft.*" maxlevel="Info" final="true" />
+        <logger name="System.Net.Http.*" maxlevel="Info" final="true" />
+
+        <!--<logger name="*" minlevel="Debug" writeTo="logfile" />-->
+        <logger name="Overflow.*" minlevel="Info" writeTo="logfile" />
+        <logger name="Microsoft.*" minlevel="Warning" writeTo="logfile" />
+      </rules>
+    </nlog>

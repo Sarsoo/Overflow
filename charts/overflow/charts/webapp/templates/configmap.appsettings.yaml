@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: "{{ include "webapp.fullname" . }}-appsettings"
+  namespace: {{ include "webapp.namespace" . }}
+  labels:
+    {{- include "webapp.labels" . | nindent 4 }}
+  {{- with .Values.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+data:
+  appsettings.json: |-
+    {
+      "Logging": {
+        "LogLevel": {
+          "Default": "Trace",
+          "Microsoft": "Warning",
+          "Microsoft.Hosting.Lifetime": "Information",
+          "Microsoft.AspNetCore.HttpLogging.HttpLoggingMiddleware": "Information"
+        }
+      },
+      "ConnectionStrings": {
+        "Default": "{{ .Values.connectionString }}"
+      },
+      "AllowedHosts": "*",
+      "SouthernWater": {
+        "Cron": "{{ .Values.jobs.southernWater }}"
+      },
+      "Cache": {
+        "Cron": "{{ .Values.jobs.cacheReload }}"
+      }
+    }
