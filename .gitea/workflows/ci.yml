@@ -32,11 +32,8 @@ jobs:
 
   build-Docker:
 
-    runs-on: ${{ matrix.arch }}
-    name: Build Containers
-    strategy:
-      matrix:
-        arch: ['ubuntu-latest']
+    runs-on: ubuntu-latest
+    name: Build Container (amd64)
     needs: [build] # for ignoring bad builds
     if: github.event_name == 'push' && (github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/'))
 
@@ -44,9 +41,6 @@ jobs:
       - uses: actions/checkout@v4
         with: 
           github-server-url: https://gitea.sheep-ghoul.ts.net
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
@@ -62,10 +56,67 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: true
-          platforms: linux/amd64,linux/arm64
-          tags: gitea.sheep-ghoul.ts.net/sarsoo/overflow:latest
+          tags: gitea.sheep-ghoul.ts.net/sarsoo/overflow:latest-amd64
           file: Dockerfile
           context: .
+
+  # build-Docker-Arm:
+
+  #   runs-on: ubuntu-latest-arm
+  #   name: Build Container (arm64)
+  #   needs: [build] # for ignoring bad builds
+  #   if: github.event_name == 'push' && (github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/'))
+
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #       with: 
+  #         github-server-url: https://gitea.sheep-ghoul.ts.net
+
+  #     - name: Set up Docker Buildx
+  #       uses: docker/setup-buildx-action@v2
+
+  #     - name: Login to DockerHub
+  #       uses: docker/login-action@v2
+  #       with:
+  #         registry: gitea.sheep-ghoul.ts.net
+  #         username: ${{ secrets.DOCKERHUB_USERNAME }}
+  #         password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+  #     - name: Build Web Container
+  #       uses: docker/build-push-action@v5
+  #       with:
+  #         push: true
+  #         tags: gitea.sheep-ghoul.ts.net/sarsoo/overflow:latest-arm64
+  #         file: Dockerfile
+  #         context: .
+
+  packageManifest:
+    runs-on: ubuntu-latest
+    name: Container Manifest
+    needs: [ build-Docker, build-Docker-Arm ] # for ignoring bad builds
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          github-server-url: https://gitea.sheep-ghoul.ts.net
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          registry: gitea.sheep-ghoul.ts.net
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Create and push manifest images
+        uses: Noelware/docker-manifest-action@master # or use a pinned version in the Releases tab
+        with:
+            inputs: gitea.sheep-ghoul.ts.net/sarsoo/overflow:latest
+            images: gitea.sheep-ghoul.ts.net/sarsoo/overflow:latest-amd64
+            # images: gitea.sheep-ghoul.ts.net/sarsoo/overflow:latest-amd64,gitea.sheep-ghoul.ts.net/sarsoo/overflow:latest-arm64
+            push: true
 
   publish:
     runs-on: ubuntu-latest
