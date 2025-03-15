@@ -10,7 +10,7 @@ jobs:
     strategy:
       matrix:
         dotnet-version: [ '9.0.x' ]
-        arch: ['ubuntu-latest', 'ubuntu-24.04-arm']
+        arch: ['ubuntu-latest']
 
     steps:
       - uses: actions/checkout@v2
@@ -33,12 +33,15 @@ jobs:
     name: Build Containers
     strategy:
       matrix:
-        arch: ['ubuntu-latest', 'ubuntu-24.04-arm']
+        arch: ['ubuntu-latest']
     needs: [build] # for ignoring bad builds
     if: github.event_name == 'push' && (github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/'))
 
     steps:
       - uses: actions/checkout@v3
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
@@ -53,6 +56,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: true
+          platforms: linux/amd64,linux/arm64
           tags: |
             sarsoo/overflow:latest
             sarsoo/overflow:${{ github.ref_name }}
