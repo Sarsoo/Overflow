@@ -13,7 +13,7 @@ public partial class SouthernWaterApi
 
     private static readonly string spillsEndpoint = "Spills/GetHistoricSpills";
 
-    private string baseUrl;
+    private string baseUrl = "https://dv.southernwater.co.uk/gateway/Beachbuoy/1.0/api/v1.0/";
     private string apiKey;
 
     public SouthernWaterApi(HttpClient client, ILogger<SouthernWaterApi> logger)
@@ -22,7 +22,7 @@ public partial class SouthernWaterApi
         _logger = logger;
     }
 
-    [GeneratedRegex(@".APIURL=""(?<APIURL>.*)"".*APIGWKEY=""(?<APIKEY>.*?)"".*", RegexOptions.IgnoreCase)]
+    [GeneratedRegex(@"const APIGWKEY = '(?<APIKEY>.*?)'.*", RegexOptions.IgnoreCase)]
     private static partial Regex ApiUrlAndKey();
 
     public async Task LoadApiUrl()
@@ -61,14 +61,14 @@ public partial class SouthernWaterApi
 
                 Match m = ApiUrlAndKey().Match(contentString);
 
-                var apiUrlFound = m.Groups.TryGetValue("APIURL", out var apiUrl);
+                // var apiUrlFound = m.Groups.TryGetValue("APIURL", out var apiUrl);
                 var apiKeyFound = m.Groups.TryGetValue("APIKEY", out var apiKey);
 
-                if (apiUrlFound)
-                {
-                    baseUrl = apiUrl.Value;
-                    _logger.LogInformation("API url found [{APIUrl}]", apiUrl);
-                }
+                // if (apiUrlFound)
+                // {
+                //     baseUrl = apiUrl.Value;
+                //     _logger.LogInformation("API url found [{APIUrl}]", apiUrl);
+                // }
 
                 if (apiKeyFound)
                 {
