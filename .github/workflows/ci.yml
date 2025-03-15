@@ -54,6 +54,7 @@ jobs:
             sarsoo/overflow:latest-amd64
             sarsoo/overflow:${{ github.ref_name }}-amd64
           file: Dockerfile
+          provenance: false
 
   build-Docker-Arm:
 
@@ -82,6 +83,7 @@ jobs:
             sarsoo/overflow:latest-arm64
             sarsoo/overflow:${{ github.ref_name }}-arm64
           file: Dockerfile
+          provenance: false
 
   packageManifest:
     runs-on: ubuntu-latest

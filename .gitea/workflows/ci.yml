@@ -58,6 +58,7 @@ jobs:
           push: true
           tags: gitea.sheep-ghoul.ts.net/sarsoo/overflow:latest-amd64
           file: Dockerfile
+          provenance: false
           context: .
 
   # build-Docker-Arm:
@@ -88,6 +89,7 @@ jobs:
   #         push: true
   #         tags: gitea.sheep-ghoul.ts.net/sarsoo/overflow:latest-arm64
   #         file: Dockerfile
+  #         provenance: false
   #         context: .
 
   packageManifest:
